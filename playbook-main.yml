@@ -1,0 +1,31 @@
+- name: Execute vManage Playbook
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    #- secrets.yaml
+    - /Users/crhill/coding/github.com/netwrkr95/viptela-api-ansible/access.yml
+
+  tasks:
+
+    - name: Modify Application List
+      modify_app_list:
+       vmanage_ip: "{{ vmanage_ip }}"
+       username: "{{ username }}"
+       password: "{{ password }}"
+       name: "Suspect_Video_Apps"
+       description: "Created by Craig in Ansible"
+       apps:
+         - foxsports
+         - cbs_video
+         - espn
+      tags: apps
+
+    - name: Activate vSmart Policy
+      activate_vsmart_policy:
+       vmanage_ip: "{{ vmanage_ip }}"
+       username: "{{ username }}"
+       password: "{{ password }}"
+       name: "Video_Quarantine_Policy_VPN-99"
+       activate: True
+      tags: activate
